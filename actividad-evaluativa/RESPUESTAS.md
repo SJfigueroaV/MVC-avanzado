@@ -19,8 +19,10 @@ visualmente de la tabla. Indique las responsabilidades de cada uno de los tres c
 3. **El Controlador interpreta el evento.** Le pregunta a la Vista qué fila está seleccionada
    (`vista.getFilaSeleccionada()`). Si devuelve `-1` (no hay selección), le pide a la Vista que muestre un
    mensaje de error y el ciclo termina ahí. Si hay selección, traduce esa fila visual a un dato del
-   negocio: un índice del `ArrayList` o, mejor aún, un identificador (código, documento).
-4. **El Modelo ejecuta la operación.** El Controlador llama a `modelo.eliminarProducto(indice)`. El Modelo
+   negocio: el identificador del elemento (su código o documento), que lee de la primera columna. Usar
+   directamente el número de fila como índice del `ArrayList` solo es seguro mientras la tabla no se
+   ordene ni se filtre.
+4. **El Modelo ejecuta la operación.** El Controlador llama a `modelo.eliminarProducto(codigo)`. El Modelo
    valida la regla de negocio (que el elemento exista, que se pueda eliminar) y lo quita del
    `ArrayList`. Si la regla falla, lanza una excepción que el Controlador atrapa y traduce en un mensaje
    para la Vista. El Modelo no toca la tabla ni sabe que existe.
@@ -28,8 +30,9 @@ visualmente de la tabla. Indique las responsabilidades de cada uno de los tres c
    (`vista.getModeloTabla()`), lo vacía con `setRowCount(0)` y recorre la lista actualizada del Modelo
    con un `for`, agregando una fila por cada elemento (`addRow`). También actualiza lo que dependa de los
    datos, como totales o contadores.
-6. **La Vista se redibuja.** Al cambiar el `DefaultTableModel`, este le notifica internamente al `JTable`
-   (`fireTableDataChanged`) y Swing vuelve a pintar la cuadrícula. La fila eliminada ya no está en el
+6. **La Vista se redibuja.** Cada cambio en el `DefaultTableModel` le avisa internamente al `JTable`:
+   `setRowCount(0)` dispara un evento de filas eliminadas (`fireTableRowsDeleted`) y cada `addRow`, uno de
+   filas insertadas (`fireTableRowsInserted`). Con esos avisos, Swing vuelve a pintar la cuadrícula. La fila eliminada ya no está en el
    lienzo, así que desaparece de la pantalla.
 
 ### Responsabilidades de cada componente
@@ -52,7 +55,8 @@ en la bodega.
 sentencias `System.out.println` y `tabla.setValueAt()`. Identifique al menos 3 violaciones a la
 arquitectura de software.
 
-Un ejemplo del tipo de código descrito:
+El PDF no incluye el fragmento de código, así que se analiza uno de ejemplo construido según lo que
+describe el enunciado:
 
 ```java
 public void actionPerformed(ActionEvent e) {
@@ -91,11 +95,12 @@ public void actionPerformed(ActionEvent e) {
 5. **Operación pesada en el hilo de la interfaz.** La consulta a la base de datos corre dentro del
    `actionPerformed`, es decir, en el *Event Dispatch Thread*. Mientras la base de datos responde, la
    ventana se congela ("No Responde"). Debería ejecutarse en segundo plano, por ejemplo con `SwingWorker`.
-6. **Falta de validación temprana y SQL inseguro.** Se llama a `Double.parseDouble` sin verificar que la
-   caja no esté vacía, y no se revisa que haya una fila seleccionada (`fila` podría ser `-1`). Además, la
-   consulta se arma concatenando texto, lo que la expone a inyección SQL. Lo correcto es usar
-   `PreparedStatement` dentro de la capa de datos. La conexión tampoco se cierra (debería usarse
-   *try-with-resources*).
+6. **Falta de validación temprana.** Se llama a `Double.parseDouble` sin verificar que la caja no esté
+   vacía, y no se revisa que haya una fila seleccionada (`fila` podría ser `-1`). Con cualquiera de las
+   dos, el programa lanza una excepción no controlada. El Controlador debe validar antes de convertir.
+7. **SQL inseguro y recursos sin cerrar.** La consulta se arma concatenando texto, lo que la expone a
+   inyección SQL; lo correcto es usar `PreparedStatement` dentro de la capa de datos. Además, la conexión
+   y el `Statement` nunca se cierran; debería usarse *try-with-resources*.
 
 ---
 

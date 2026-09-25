@@ -1,30 +1,26 @@
 /**
  * ENTIDAD: representa un estudiante con sus dos notas parciales y su nota final.
+ * Es inmutable: la nota final la calcula el Modelo al crearlo, y nadie puede
+ * cambiar una nota sin que la nota final quede desactualizada.
  */
 public class Estudiante {
-    private String nombre;
-    private double nota1;
-    private double nota2;
-    private double notaFinal;
+    private final String nombre;
+    private final double nota1;
+    private final double nota2;
+    private final double notaFinal;
 
-    public Estudiante(String nombre, double nota1, double nota2) {
+    public Estudiante(String nombre, double nota1, double nota2, double notaFinal) {
         this.nombre = nombre;
         this.nota1 = nota1;
         this.nota2 = nota2;
+        this.notaFinal = notaFinal;
     }
 
-    // Getters y Setters
+    // Getters
     public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-
     public double getNota1() { return nota1; }
-    public void setNota1(double nota1) { this.nota1 = nota1; }
-
     public double getNota2() { return nota2; }
-    public void setNota2(double nota2) { this.nota2 = nota2; }
-
     public double getNotaFinal() { return notaFinal; }
-    public void setNotaFinal(double notaFinal) { this.notaFinal = notaFinal; }
 
     @Override
     public String toString() {

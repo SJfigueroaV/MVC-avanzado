@@ -1,10 +1,12 @@
 /**
  * ENTIDAD: representa un paciente de la clínica.
+ * Sus datos no cambian después del ingreso; el único estado que cambia es el alta,
+ * y eso solo lo hace ClinicaModel, que aplica la regla de negocio.
  */
 public class Paciente {
-    private String documento;
-    private String nombre;
-    private String diagnostico;
+    private final String documento;
+    private final String nombre;
+    private final String diagnostico;
     private boolean dadoDeAlta;
 
     public Paciente(String documento, String nombre, String diagnostico) {
@@ -14,18 +16,16 @@ public class Paciente {
         this.dadoDeAlta = false; // Todo paciente ingresa hospitalizado
     }
 
-    // Getters y Setters
+    // Getters
     public String getDocumento() { return documento; }
-    public void setDocumento(String documento) { this.documento = documento; }
-
     public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-
     public String getDiagnostico() { return diagnostico; }
-    public void setDiagnostico(String diagnostico) { this.diagnostico = diagnostico; }
-
     public boolean isDadoDeAlta() { return dadoDeAlta; }
-    public void setDadoDeAlta(boolean dadoDeAlta) { this.dadoDeAlta = dadoDeAlta; }
+
+    // Sin modificador de acceso: pensado para que solo lo use ClinicaModel
+    void marcarDadoDeAlta() {
+        this.dadoDeAlta = true;
+    }
 
     @Override
     public String toString() {

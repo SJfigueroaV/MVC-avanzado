@@ -1,3 +1,5 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.SwingUtilities;
 
 /**
@@ -17,8 +19,16 @@ public class Main {
                 VentanaReportes ventanaReportes = new VentanaReportes();
 
                 // Los Controladores reciben el MISMO Modelo
-                ReportesController reportes = new ReportesController(modelo, ventanaReportes);
-                new ClinicaController(modelo, ventanaClinica, reportes);
+                final ReportesController reportes = new ReportesController(modelo, ventanaReportes);
+                new ClinicaController(modelo, ventanaClinica);
+
+                // La navegación entre ventanas se conecta aquí, así ningún controlador depende del otro
+                ventanaClinica.agregarListenerReportes(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        reportes.mostrarVentana();
+                    }
+                });
 
                 ventanaReportes.setLocationRelativeTo(ventanaClinica);
                 ventanaClinica.setVisible(true);

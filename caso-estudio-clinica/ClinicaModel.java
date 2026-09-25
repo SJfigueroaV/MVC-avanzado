@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MODELO: la "bodega" de la clínica. El ArrayList de pacientes ya no está atrapado
@@ -38,11 +39,11 @@ public class ClinicaModel {
         if (paciente.isDadoDeAlta()) {
             throw new IllegalArgumentException(paciente.getNombre() + " ya fue dado de alta.");
         }
-        paciente.setDadoDeAlta(true);
+        paciente.marcarDadoDeAlta();
         notificarCambio();
     }
 
-    public ArrayList<Paciente> getHospitalizados() {
+    public List<Paciente> getHospitalizados() {
         ArrayList<Paciente> hospitalizados = new ArrayList<>();
         for (Paciente p : pacientes) {
             if (!p.isDadoDeAlta()) {
@@ -52,7 +53,7 @@ public class ClinicaModel {
         return hospitalizados;
     }
 
-    public ArrayList<Paciente> getDadosDeAlta() {
+    public List<Paciente> getDadosDeAlta() {
         ArrayList<Paciente> altas = new ArrayList<>();
         for (Paciente p : pacientes) {
             if (p.isDadoDeAlta()) {

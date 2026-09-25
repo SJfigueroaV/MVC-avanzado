@@ -1,3 +1,5 @@
+import java.util.List;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -12,11 +14,17 @@ public class ReportesController {
         this.modelo = modelo;
         this.vista = vista;
 
-        // Cada vez que la bodega cambie (sin importar quién la cambió), se refresca el reporte
+        // Cada vez que la bodega cambie (sin importar quién la cambió), se refresca el reporte.
+        // Swing solo se puede tocar desde su propio hilo (EDT), así que el repintado se agenda ahí.
         this.modelo.agregarObservador(new Runnable() {
             @Override
             public void run() {
-                actualizarReporte();
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        actualizarReporte();
+                    }
+                });
             }
         });
 
@@ -30,15 +38,14 @@ public class ReportesController {
     }
 
     private void actualizarReporte() {
-        vista.mostrarResumen(modelo.totalPacientes(),
-                modelo.getHospitalizados().size(),
-                modelo.getDadosDeAlta().size());
+        List<Paciente> altas = modelo.getDadosDeAlta();
+        vista.mostrarResumen(modelo.totalPacientes(), modelo.getHospitalizados().size(), altas.size());
 
         // Borramos lo pintado anteriormente para no duplicar filas
         DefaultTableModel lienzo = vista.getModeloTabla();
         lienzo.setRowCount(0);
 
-        for (Paciente p : modelo.getDadosDeAlta()) {
+        for (Paciente p : altas) {
             Object[] filaNueva = { p.getDocumento(), p.getNombre(), p.getDiagnostico() };
             lienzo.addRow(filaNueva);
         }

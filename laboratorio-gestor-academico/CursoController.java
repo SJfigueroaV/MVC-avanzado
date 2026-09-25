@@ -65,10 +65,15 @@ public class CursoController {
 
         // Recorremos el ArrayList del Modelo y pintamos fila por fila
         for (Estudiante e : modelo.getEstudiantes()) {
-            Object[] filaNueva = { e.getNombre(), e.getNota1(), e.getNota2(), e.getNotaFinal() };
+            Object[] filaNueva = { e.getNombre(), formatear(e.getNota1()), formatear(e.getNota2()), formatear(e.getNotaFinal()) };
             lienzo.addRow(filaNueva); // Agrega la fila visual
         }
 
         vista.mostrarTotal(modelo.cantidadEstudiantes());
+    }
+
+    // Todas las notas con dos decimales (ej: 3.00, 2.63)
+    private String formatear(double nota) {
+        return String.format("%.2f", nota);
     }
 }

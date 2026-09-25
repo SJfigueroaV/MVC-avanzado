@@ -1,5 +1,6 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -9,12 +10,10 @@ import javax.swing.table.DefaultTableModel;
 public class ClinicaController {
     private ClinicaModel modelo;
     private VentanaClinica vista;
-    private ReportesController reportes;
 
-    public ClinicaController(ClinicaModel modelo, VentanaClinica vista, ReportesController reportes) {
+    public ClinicaController(ClinicaModel modelo, VentanaClinica vista) {
         this.modelo = modelo;
         this.vista = vista;
-        this.reportes = reportes;
 
         this.vista.agregarListenerRegistrar(new ActionListener() {
             @Override
@@ -30,18 +29,16 @@ public class ClinicaController {
             }
         });
 
-        this.vista.agregarListenerReportes(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ClinicaController.this.reportes.mostrarVentana();
-            }
-        });
-
-        // La tabla se repinta sola cada vez que la bodega cambia
+        // La tabla se repinta sola cada vez que la bodega cambia (siempre en el hilo de Swing)
         this.modelo.agregarObservador(new Runnable() {
             @Override
             public void run() {
-                actualizarTabla();
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        actualizarTabla();
+                    }
+                });
             }
         });
     }

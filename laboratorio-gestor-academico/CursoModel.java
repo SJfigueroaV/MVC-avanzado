@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * MODELO: la "bodega" del curso. Guarda los estudiantes en una lista dinámica y
@@ -22,30 +24,24 @@ public class CursoModel {
         validarNota(nota1, "Nota 1");
         validarNota(nota2, "Nota 2");
 
-        Estudiante estudiante = new Estudiante(nombre.trim(), nota1, nota2);
-        calcularNotaFinal(estudiante);
-        estudiantes.add(estudiante);
+        double notaFinal = calcularNotaFinal(nota1, nota2);
+        estudiantes.add(new Estudiante(nombre.trim(), nota1, nota2, notaFinal));
     }
 
     /**
      * Calcula la nota final como el promedio de las dos notas, redondeado a dos decimales.
      */
-    public void calcularNotaFinal(Estudiante estudiante) {
-        double promedio = (estudiante.getNota1() + estudiante.getNota2()) / 2.0;
-        estudiante.setNotaFinal(Math.round(promedio * 100.0) / 100.0);
+    public double calcularNotaFinal(double nota1, double nota2) {
+        double promedio = (nota1 + nota2) / 2.0;
+        return Math.round(promedio * 100.0) / 100.0;
     }
 
     /**
-     * Recalcula la nota final de todos los estudiantes del curso.
+     * Devuelve la lista en modo solo lectura: quien la recibe puede recorrerla,
+     * pero no agregar ni borrar estudiantes saltándose las reglas del Modelo.
      */
-    public void calcularNotasFinales() {
-        for (Estudiante e : estudiantes) {
-            calcularNotaFinal(e);
-        }
-    }
-
-    public ArrayList<Estudiante> getEstudiantes() {
-        return estudiantes;
+    public List<Estudiante> getEstudiantes() {
+        return Collections.unmodifiableList(estudiantes);
     }
 
     public int cantidadEstudiantes() {
@@ -53,7 +49,8 @@ public class CursoModel {
     }
 
     private void validarNota(double nota, String campo) {
-        if (nota < NOTA_MINIMA || nota > NOTA_MAXIMA) {
+        // NaN no es menor ni mayor que nada, por eso se descarta aparte
+        if (Double.isNaN(nota) || nota < NOTA_MINIMA || nota > NOTA_MAXIMA) {
             throw new IllegalArgumentException(campo + " debe estar entre " + NOTA_MINIMA + " y " + NOTA_MAXIMA + ".");
         }
     }
