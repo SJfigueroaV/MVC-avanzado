@@ -8,6 +8,7 @@ Escuela de Ciencias Exactas e Ingeniería — Universidad Sergio Arboleda
 
 - Santiago Figueroa
 - Sarai Mejía
+- Camilo Betancourt
 
 Aplicaciones de escritorio en Java Swing que muestran listas dinámicas (`ArrayList`) en un `JTable`
 aplicando el patrón MVC, junto con las respuestas de la actividad evaluativa y las preguntas para discusión.
