@@ -4,6 +4,11 @@ Fundamentos de Diseño de Software
 Programa Ciencias de la Computación e Inteligencia Artificial
 Escuela de Ciencias Exactas e Ingeniería — Universidad Sergio Arboleda
 
+**Integrantes:**
+
+- Santiago Figueroa
+- Sarai Mejía
+
 Aplicaciones de escritorio en Java Swing que muestran listas dinámicas (`ArrayList`) en un `JTable`
 aplicando el patrón MVC, junto con las respuestas de la actividad evaluativa y las preguntas para discusión.
 

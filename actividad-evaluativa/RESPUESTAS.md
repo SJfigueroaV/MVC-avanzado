@@ -1,5 +1,7 @@
 # Actividad Evaluativa y Preguntas para Discusión
 
+**Integrantes:** Santiago Figueroa y Sarai Mejía
+
 ## 1. Pregunta tipo ensayo
 
 **Enunciado:** explique detalladamente el proceso que debe ocurrir en la arquitectura MVC desde el
