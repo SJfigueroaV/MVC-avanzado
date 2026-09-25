@@ -1,6 +1,6 @@
 # Actividad Evaluativa y Preguntas para Discusión
 
-**Integrantes:** Santiago Figueroa y Sarai Mejía
+**Integrantes:** Santiago Figueroa, Sarai Mejía y Camilo Betancourt
 
 ## 1. Pregunta tipo ensayo
 
